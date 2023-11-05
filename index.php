@@ -26,10 +26,11 @@ $result_task1 = $conn->query($query_task1);
 
 // Task 2: Retrieve product name, quantity, and total amount for each order item
 $query_task2 = "
-    SELECT Products.name AS product_name, Order_Items.quantity, (Order_Items.quantity * Order_Items.unit_price) AS total_amount
-    FROM Order_Items
-    JOIN Products ON Order_Items.product_id = Products.product_id
-    ORDER BY Order_Items.order_item_id ASC;
+    SELECT OI.order_id, P.name AS product_name, OI.quantity, (OI.quantity * OI.unit_price) AS total_amount
+    FROM Order_Items OI
+    JOIN Products P ON OI.product_id = P.product_id
+    ORDER BY OI.order_id ASC;
+
 ";
 
 $result_task2 = $conn->query($query_task2);
@@ -96,6 +97,7 @@ $conn->close();
         <table class="table table-striped table-bordered">
             <thead>
                 <tr>
+                    <th>Order ID</th>
                     <th>Product Name</th>
                     <th>Quantity</th>
                     <th>Total Amount</th>
@@ -104,6 +106,7 @@ $conn->close();
             <tbody>
                 <?php while ($row = $result_task2->fetch_assoc()) { ?>
                     <tr>
+                        <td><?= $row['order_id'] ?></td>
                         <td><?= $row['product_name'] ?></td>
                         <td><?= $row['quantity'] ?></td>
                         <td><?= $row['total_amount'] ?></td>
